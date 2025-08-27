@@ -5,6 +5,16 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Welcome Screen')),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('assets/images/sea.jpg', fit: BoxFit.cover),
+          ),
+          Center(child: Text('Welcome', style: TextStyle(fontSize: 24))),
+        ],
+      ),
+    );
   }
 }
