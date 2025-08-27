@@ -50,23 +50,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: saveSettings,
+        onPressed: () => saveSettings().then((value) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(
+                  value
+                      ? 'The settings have been saved'
+                      : 'Error: the settings were not saved',
+                ),
+              ),
+            );
+        }),
         child: const Icon(Icons.save_rounded),
       ),
     );
   }
 
-  Future saveSettings() async {
-    final spHelper = SPHelper();
-    await spHelper.setSettings(
+  Future<bool> saveSettings() async {
+    return await SPHelper().setSettings(
       name: _nameController.text,
       image: _selectedImage,
     );
   }
 
   Future<void> getSettings() async {
-    final spHelper = SPHelper();
-    final settings = await spHelper.getSettings();
+    final settings = await SPHelper().getSettings();
     setState(() {
       _nameController.text = settings[SPHelper.nameKey] ?? '';
       _selectedImage = settings[SPHelper.imageKey] ?? 'Lake';
