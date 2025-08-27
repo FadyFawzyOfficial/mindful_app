@@ -13,6 +13,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _nameController = TextEditingController();
   final _images = ['Lake', 'Mountain', 'Sea', 'Country'];
   var _selectedImage = 'Lake';
+  final _spHelper = SPHelper();
 
   @override
   void initState() {
@@ -68,15 +69,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
   Future<bool> saveSettings() async {
-    return await SPHelper().setSettings(
+    return await _spHelper.setSettings(
       name: _nameController.text,
       image: _selectedImage,
     );
   }
 
   Future<void> getSettings() async {
-    final settings = await SPHelper().getSettings();
+    final settings = await _spHelper.getSettings();
     setState(() {
       _nameController.text = settings[SPHelper.nameKey] ?? '';
       _selectedImage = settings[SPHelper.imageKey] ?? 'Lake';
