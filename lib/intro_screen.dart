@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:mindful_app/data/sp_helper.dart';
 
 import 'settings_screen.dart';
 
-class IntroScreen extends StatelessWidget {
+class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
+
+  @override
+  State<IntroScreen> createState() => _IntroScreenState();
+}
+
+class _IntroScreenState extends State<IntroScreen> {
+  var _name = '';
+  var _image = 'Lake';
+
+  @override
+  void initState() {
+    super.initState();
+    final settings = SPHelper().getSettings();
+    settings.then((value) {
+      setState(() {
+        _name = value[SPHelper.nameKey] ?? '';
+        _image = (value[SPHelper.imageKey] ?? 'Lake').toLowerCase();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +33,12 @@ class IntroScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('assets/images/sea.jpg', fit: BoxFit.cover),
+            child: Image.asset('assets/images/$_image.jpg', fit: BoxFit.cover),
           ),
           Align(
             alignment: Alignment(0, -0.5),
             child: Text(
-              'Welcome',
+              'Welcome $_name',
               style: TextStyle(
                 color: Colors.white,
                 shadows: [
