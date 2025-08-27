@@ -12,7 +12,27 @@ class IntroScreen extends StatelessWidget {
           Positioned.fill(
             child: Image.asset('assets/images/sea.jpg', fit: BoxFit.cover),
           ),
-          Center(child: Text('Welcome', style: TextStyle(fontSize: 24))),
+          Align(
+            alignment: Alignment(0, -0.5),
+            child: Text(
+              'Welcome',
+              style: TextStyle(
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    blurRadius: 10,
+                    color: Colors.black,
+                    offset: Offset(5, 5),
+                  ),
+                ],
+                fontSize: 24,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment(0, 0.5),
+            child: ElevatedButton(onPressed: () {}, child: Text('Start')),
+          ),
         ],
       ),
     );
