@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'data/quote.dart';
+
 class QuoteScreen extends StatefulWidget {
   const QuoteScreen({super.key});
 
@@ -10,11 +12,12 @@ class QuoteScreen extends StatefulWidget {
 
 class _QuoteScreenState extends State<QuoteScreen> {
   static const _quoteUrl = 'https://zenquotes.io/api/random';
+  var quote = Quote(text: '', author: '');
 
   @override
   void initState() {
     super.initState();
-    fetchQuote();
+    fetchQuote().then((value) => setState(() => quote = value));
   }
 
   @override
@@ -27,11 +30,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Quote',
+              quote.text,
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
             ),
             Text(
-              'Author',
+              quote.author,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -40,9 +43,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 
-  Future fetchQuote() async {
+  Future<Quote> fetchQuote() async {
     final Uri url = Uri.parse(_quoteUrl);
     final response = await http.get(url);
-    print(response.body);
+    final quote = Quote.fromJson(response.body);
+    return quote;
   }
 }

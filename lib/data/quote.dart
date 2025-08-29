@@ -7,7 +7,8 @@ class Quote {
   Quote({required this.text, required this.author});
 
   factory Quote.fromMap(Map<String, dynamic> map) =>
-      Quote(text: map['text'] ?? '', author: map['author'] ?? '');
+      Quote(text: map['q'] ?? '', author: map['a'] ?? '');
 
-  factory Quote.fromJson(String source) => Quote.fromMap(json.decode(source));
+  factory Quote.fromJson(String source) =>
+      Quote.fromMap((json.decode(source))[0]);
 }
