@@ -87,6 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _nameController.text = settings[SPHelper.nameKey] ?? '';
       _selectedImage = settings[SPHelper.imageKey] ?? 'Lake';
+      _selectedImage = _selectedImage.isEmpty ? 'Lake' : _selectedImage;
     });
   }
 }

@@ -12,12 +12,12 @@ class QuoteScreen extends StatefulWidget {
 
 class _QuoteScreenState extends State<QuoteScreen> {
   static const _quoteUrl = 'https://zenquotes.io/api/random';
-  var quote = Quote(text: '', author: '');
+  var _quote = Quote(text: '', author: '');
 
   @override
   void initState() {
     super.initState();
-    fetchQuote().then((value) => setState(() => quote = value));
+    fetchQuote();
   }
 
   @override
@@ -30,11 +30,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              quote.text,
+              _quote.text,
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
             ),
             Text(
-              quote.author,
+              _quote.author,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -43,10 +43,13 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 
-  Future<Quote> fetchQuote() async {
+  Future fetchQuote() async {
     final Uri url = Uri.parse(_quoteUrl);
     final response = await http.get(url);
-    final quote = Quote.fromJson(response.body);
-    return quote;
+    if (response.statusCode == 200) {
+      setState(() => _quote = Quote.fromJson(response.body));
+    } else {
+      setState(() => _quote = Quote(text: 'Failed to load quote', author: ''));
+    }
   }
 }
