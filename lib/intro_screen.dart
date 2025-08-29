@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mindful_app/data/sp_helper.dart';
 
-import 'settings_screen.dart';
+import 'data/sp_helper.dart';
+import 'quote_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -12,16 +12,17 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen> {
   var _name = '';
-  var _image = 'Lake';
+  var _image = 'lake';
 
   @override
   void initState() {
     super.initState();
-    final settings = SPHelper().getSettings();
-    settings.then((value) {
+    SPHelper().getSettings().then((value) {
+      if (value.isEmpty) return;
       setState(() {
         _name = value[SPHelper.nameKey] ?? '';
-        _image = (value[SPHelper.imageKey] ?? 'Lake').toLowerCase();
+        _image = (value[SPHelper.imageKey]?.toLowerCase() ?? 'lake');
+        _image = _image.isEmpty ? 'lake' : _image;
       });
     });
   }
@@ -57,7 +58,7 @@ class _IntroScreenState extends State<IntroScreen> {
             child: ElevatedButton(
               onPressed: () => Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (context) => SettingsScreen())),
+              ).push(MaterialPageRoute(builder: (context) => QuoteScreen())),
               child: Text('Start'),
             ),
           ),
