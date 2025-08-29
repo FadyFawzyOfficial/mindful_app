@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'data/quote.dart';
+import 'settings_screen.dart';
 
 class QuoteScreen extends StatefulWidget {
   const QuoteScreen({super.key});
@@ -23,7 +24,22 @@ class _QuoteScreenState extends State<QuoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Mindful Quote')),
+      appBar: AppBar(
+        title: Text('Mindful Quote'),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsScreen()),
+            ),
+            icon: const Icon(Icons.settings_rounded),
+          ),
+          IconButton(
+            onPressed: fetchQuote,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -31,11 +47,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
           children: [
             Text(
               _quote.text,
-              style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
+              style: const TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
             ),
             Text(
               _quote.author,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
