@@ -13,13 +13,7 @@ class QuoteScreen extends StatefulWidget {
 
 class _QuoteScreenState extends State<QuoteScreen> {
   static const _quoteUrl = 'https://zenquotes.io/api/random';
-  var _quote = Quote(text: '', author: '');
-
-  @override
-  void initState() {
-    super.initState();
-    fetchQuote();
-  }
+  final _quote = Quote(text: '', author: '');
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +53,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 
-  Future fetchQuote() async {
+  Future<Quote> fetchQuote() async {
     final Uri url = Uri.parse(_quoteUrl);
     final response = await http.get(url);
-    if (response.statusCode == 200) {
-      setState(() => _quote = Quote.fromJson(response.body));
-    } else {
-      setState(() => _quote = Quote(text: 'Failed to load quote', author: ''));
-    }
+    return response.statusCode == 200
+        ? Quote.fromJson(response.body)
+        : Quote(text: 'Failed to load quote', author: '');
   }
 }
