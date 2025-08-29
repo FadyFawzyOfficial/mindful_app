@@ -13,7 +13,6 @@ class QuoteScreen extends StatefulWidget {
 
 class _QuoteScreenState extends State<QuoteScreen> {
   static const _quoteUrl = 'https://zenquotes.io/api/random';
-  final _quote = Quote(text: '', author: '');
 
   @override
   Widget build(BuildContext context) {
@@ -29,26 +28,45 @@ class _QuoteScreenState extends State<QuoteScreen> {
             icon: const Icon(Icons.settings_rounded),
           ),
           IconButton(
-            onPressed: fetchQuote,
+            onPressed: () => fetchQuote(),
             icon: const Icon(Icons.refresh_rounded),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              _quote.text,
-              style: const TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
-            ),
-            Text(
-              _quote.author,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
+      body: FutureBuilder(
+        future: fetchQuote(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final quote = snapshot.data!;
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    quote.text,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Text(
+                    quote.author,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
