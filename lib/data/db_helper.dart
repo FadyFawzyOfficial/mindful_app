@@ -32,6 +32,12 @@ class DbHelper {
   //! an existing one.
   factory DbHelper() => _instance;
 
+  //! Make sure I open the database only once. I'll create a getter
+  Future<Database> get _db async {
+    db ??= await _openDb();
+    return db!;
+  }
+
   Future<Database> _openDb() async {
     final docsPath = await getApplicationDocumentsDirectory();
     final dbPath = join(docsPath.path, 'quotes.db');
@@ -41,7 +47,7 @@ class DbHelper {
 
   Future<int> insertQuote(Quote quote) async {
     try {
-      Database db = await _openDb();
+      Database db = await _db;
       int id = await store.add(db, quote.toMap());
       return id;
     } on Exception catch (_) {
@@ -50,7 +56,7 @@ class DbHelper {
   }
 
   Future<List<Quote>> getQuotes() async {
-    Database db = await _openDb();
+    Database db = await _db;
     final finder = Finder(sortOrders: [SortOrder('q')]);
     final quotesSnapShot = await store.find(db, finder: finder);
     return quotesSnapShot.map((item) {
@@ -62,7 +68,7 @@ class DbHelper {
 
   Future<bool> deleteQuote(int id) async {
     try {
-      final db = await _openDb();
+      final db = await _db;
       await store.record(id).delete(db);
       return true;
     } on Exception catch (_) {
