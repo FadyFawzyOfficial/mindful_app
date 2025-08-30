@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mindful_app/data/db_helper.dart';
 
+import 'data/db_helper.dart';
 import 'data/quote.dart';
 import 'settings_screen.dart';
 
@@ -15,6 +15,13 @@ class QuoteScreen extends StatefulWidget {
 class _QuoteScreenState extends State<QuoteScreen> {
   var quote = Quote(text: '', author: '');
   static const _quoteUrl = 'https://zenquotes.io/api/random';
+  late Future<Quote> _futureQuote;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureQuote = fetchQuote();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +30,22 @@ class _QuoteScreenState extends State<QuoteScreen> {
         title: Text('Mindful Quote'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.settings_rounded),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SettingsScreen()),
             ),
-            icon: const Icon(Icons.settings_rounded),
           ),
           IconButton(
-            onPressed: () => fetchQuote(),
             icon: const Icon(Icons.refresh_rounded),
+            onPressed: () => setState(() {
+              _futureQuote = fetchQuote();
+            }),
           ),
         ],
       ),
       body: FutureBuilder(
-        future: fetchQuote(),
+        future: _futureQuote,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
