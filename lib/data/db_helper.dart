@@ -45,4 +45,14 @@ class DbHelper {
       return quote;
     }).toList();
   }
+
+  Future<bool> deleteQuote(int id) async {
+    try {
+      final db = await _openDb();
+      await store.record(id).delete(db);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
 }
