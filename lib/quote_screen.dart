@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mindful_app/data/db_helper.dart';
 
 import 'data/quote.dart';
 import 'settings_screen.dart';
@@ -12,6 +13,7 @@ class QuoteScreen extends StatefulWidget {
 }
 
 class _QuoteScreenState extends State<QuoteScreen> {
+  var quote = Quote(text: '', author: '');
   static const _quoteUrl = 'https://zenquotes.io/api/random';
 
   @override
@@ -42,7 +44,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            final quote = snapshot.data!;
+            quote = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -66,6 +68,27 @@ class _QuoteScreenState extends State<QuoteScreen> {
               ),
             );
           }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.save_rounded),
+        onPressed: () {
+          final dbHelper = DbHelper();
+          dbHelper
+              .insertQuote(quote)
+              .then(
+                (id) => ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        id != 0
+                            ? 'The quote was saved successfully'
+                            : 'An error occurred. The quote could not be saved',
+                      ),
+                    ),
+                  ),
+              );
         },
       ),
     );
