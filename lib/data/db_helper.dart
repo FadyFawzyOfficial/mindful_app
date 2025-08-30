@@ -18,6 +18,20 @@ class DbHelper {
   Database? db;
   final store = intMapStoreFactory.store('quotes');
 
+  //! 2. Create a static instance that will hold a single instance of the DbHelper class.
+  static final _instance = DbHelper._internal();
+
+  //! 1. Create a private constructor calling it _internal with an underscore.
+  //? This will prevent direct instantiation of the class from outside.
+  DbHelper._internal();
+
+  //! 3. Create the factory constructor itself. Here, I'll return the instance.
+  //? Note that differently form the constructors I generally use that always
+  //? return an new instance of the class, with a factory constructor, you can
+  //? decide what returns, and this means generally a new instance of the class or
+  //! an existing one.
+  factory DbHelper() => _instance;
+
   Future<Database> _openDb() async {
     final docsPath = await getApplicationDocumentsDirectory();
     final dbPath = join(docsPath.path, 'quotes.db');
