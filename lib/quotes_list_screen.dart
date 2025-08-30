@@ -18,11 +18,15 @@ class QuotesListScreen extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            final List<ListTile> quoteListTiles = snapshot.data!
+            final List<Dismissible> quoteListTiles = snapshot.data!
                 .map(
-                  (quote) => ListTile(
-                    title: Text(quote.text),
-                    subtitle: Text(quote.author),
+                  (quote) => Dismissible(
+                    key: Key('${quote.id}'),
+                    onDismissed: (_) => DbHelper().deleteQuote(quote.id!),
+                    child: ListTile(
+                      title: Text(quote.text),
+                      subtitle: Text(quote.author),
+                    ),
                   ),
                 )
                 .toList();
