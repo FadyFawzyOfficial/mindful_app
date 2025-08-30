@@ -1,4 +1,4 @@
-# Mindful App 🥞🍱🍳
+# Mindful App 🧘🏻🧠
 
 Mindful is a mobile application that contains quotes.
 Mindful App is a Flutter Project For Mobile Application.
