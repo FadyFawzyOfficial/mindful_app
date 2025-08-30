@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'db_helper.dart';
-import 'quote.dart';
+import 'data/db_helper.dart';
+import 'data/quote.dart';
 
-class QuoteListScreen extends StatelessWidget {
-  const QuoteListScreen({super.key});
+class QuotesListScreen extends StatelessWidget {
+  const QuotesListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

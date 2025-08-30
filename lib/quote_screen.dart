@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'data/db_helper.dart';
 import 'data/quote.dart';
-import 'data/quotes_list_screen.dart';
+import 'quotes_list_screen.dart';
 import 'settings_screen.dart';
 
 class QuoteScreen extends StatefulWidget {
@@ -112,7 +112,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   void _goToQuotesList() => Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => QuoteListScreen()),
+    MaterialPageRoute(builder: (context) => QuotesListScreen()),
   );
 
   Future<Quote> fetchQuote() async {
